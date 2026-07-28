@@ -193,15 +193,15 @@ let app = new Vue({
     },
 
     // ==================================================================================
-    meta_html(item, itemKey) {
-      if (itemKey == "TLA" && item.length > 0) {
-        const tla_list = item.split(";")
+    meta_html(key, value) {
+      if (key == "TLA" && value.length > 0) {
+        const tla_list = value.split(";")
         const url_list = tla_list.map((tla) => {
           return `<a href="https://thesaurus-linguae-aegyptiae.de/sentence/${tla}" target="_blank"><button class="btn btn-primary btn-sm">${tla}</button></a>`
         });
-        return `<strong>${itemKey}:</strong> ${url_list.join("; ")}`;
+        return `<strong>${key}:</strong> ${url_list.join("; ")}`;
       } else {
-         return `<strong>${itemKey}:</strong> ${item}`;
+        return `<strong>${key}:</strong> ${value}`;
       }
     },
 
