@@ -194,7 +194,8 @@ let app = new Vue({
 
     // ==================================================================================
     meta_html(key, value) {
-      if (key == "TLA" && value.length > 0) {
+      if (key == "##MWT_MISC##") { return "" }
+      if (key == "TLA" && value.length > 0 && value !== "No") {
         const tla_list = value.split(";")
         const url_list = tla_list.map((tla) => {
           return `<a href="https://thesaurus-linguae-aegyptiae.de/sentence/${tla}" target="_blank"><button class="btn btn-primary btn-sm">${tla}</button></a>`
