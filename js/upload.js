@@ -10,6 +10,9 @@ const app = new Vue({
     file_array: [],
     desc: {},
     url: "",
+    codes: "",
+    lang: undefined,
+    lang_name: "Universal",
     uploading: false,
     name: "",
     max_size: 100 * 1024 * 1024,  // 100 MB
@@ -19,13 +22,24 @@ const app = new Vue({
       return this.file_array.reduce((acc, file) => acc + file.size, 0);
     },
     file_type() {
-      return this.current_schema === "Parseme" ? "CUPT" : "CoNNL-U"
+      return this.current_schema === "Parseme" ? "CUPT" : "CoNLL-U"
     },
     extension() {
       return this.current_schema === "Parseme" ? ".cupt" : ".conllu,.conll"
     }
   },
 
+  watch: {
+    lang: function() {
+      if (this.lang === "") 
+        {this.lang_name = "Universal"}
+      else if (this.lang in this.codes) {
+        this.lang_name = this.codes[this.lang]
+      } else {
+        this.lang_name = undefined
+      }
+    }
+  },
   methods: {
     humanFileSize(bytes) {
       if (bytes === 0) return '0 B';
@@ -37,7 +51,15 @@ const app = new Vue({
 
     remove_file(name) {
       this.file_array.splice(name, 1);
+    },
+
+    copy_to_clickboard() {
+      navigator.clipboard.writeText(this.url).then(() => {
+      }).catch(err => {
+        console.error('Failed to copy URL:', err);
+      });
     }
+
   }
 });
 
@@ -47,6 +69,7 @@ document.addEventListener('DOMContentLoaded', start);
 // ==================================================================================
 async function start() {
   try {
+    app.codes = await get_ud_langs();
     const config = await fetch_json('config.json');
     if ("instances" in config) {
       const instances = config.instances;
@@ -71,10 +94,11 @@ $("#corpus_input").change((event) => {
 async function build_corpus() {
   app.uploading = true
   app.url = ''
-  const data = { 
+  const data = {
     schema: app.current_schema,
     name: app.name,
   };
+  if (app.lang in app.codes) {data["lang"]=app.lang}
   const response = await generic_files(app.backend_server, 'new_corpus', app.file_array, data);
   if (response.session_id) {
     app.desc = response.desc
@@ -86,4 +110,26 @@ async function build_corpus() {
   }
   app.uploading = false
 }
+
+// ====================================================================================================
+  async function get_ud_langs() {
+    const url = "https://raw.githubusercontent.com/UniversalDependencies/docs-automation/refs/heads/master/codes_and_flags.yaml";
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`Fetch failed: ${res.status} ${res.statusText}`);
+    const text = await res.text();
+    const lines = text.split("\n")
+
+    const dict = {}
+
+    let lang = undefined
+    lines.forEach(line => {
+      if (!(line.startsWith (" "))) {
+        lang = line.slice(0,-1)
+      } else if (line.startsWith ("  lcode: ")) {
+        const lcode = line.slice (9)
+        dict[lcode]=lang
+      }
+    });
+    return dict
+  }
 
