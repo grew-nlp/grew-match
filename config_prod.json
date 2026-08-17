@@ -1,6 +1,6 @@
 {
-  "snippets_url": "https://raw.githubusercontent.com/grew-nlp/corpusbank/refs/heads/main/grew_match_snippets/",
-  "instances_url": "https://raw.githubusercontent.com/grew-nlp/corpusbank/refs/heads/main/grew_match_instances/",
+  "snippets_url": "https://grew.fr/corpusbank/grew_match_snippets/",
+  "instances_url": "https://grew.fr/corpusbank/grew_match_instances/",
   "instances": {
     "universal.grew.fr": {
       "backend": "https://gmd-universal.grew.fr/",
