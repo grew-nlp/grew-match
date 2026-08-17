@@ -1,6 +1,6 @@
 {
-  "snippets_url": "https://grew.fr/corpusbank/grew_match_snippets/",
-  "instances_url": "https://grew.fr/corpusbank/grew_match_instances/",
+  "snippets_url": "https://universal.grew.fr/corpusbank/grew_match_snippets/",
+  "instances_url": "https://universal.grew.fr/corpusbank/grew_match_instances/",
   "instances": {
     "universal.grew.fr": {
       "backend": "https://gmd-universal.grew.fr/",
