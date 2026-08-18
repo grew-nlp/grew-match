@@ -1,5 +1,5 @@
 {
-  "snippets_url": "https://universal.grew.fr/corpusbank/grew_match_snippets/",
+  "snippets_url": "corpusbank/grew_match_snippets/",
 	"backend": "http://localhost:4758/",
 	"desc": [
 		{
